@@ -29,8 +29,10 @@
     "@faker-js/faker": "^9.2.0",
     "celebrate": "^15.0.3",
     "express": "^4.19.2",
+    "express-winston": "^4.2.0",
     "libphonenumber-js": "^1.11.13",
     "mongoose": "^8.3.2",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "winston": "^3.16.0"
   }
 }
