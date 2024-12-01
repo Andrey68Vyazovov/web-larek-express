@@ -1,6 +1,5 @@
-import { Error } from "mongoose";
-import { HttpCodes } from "./constants";
-
+import { Error } from 'mongoose';
+import { HttpCodes } from './constants';
 
 export class HttpError extends Error {
   public statusCode: number;

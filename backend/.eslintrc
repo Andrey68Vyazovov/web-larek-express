@@ -45,6 +45,7 @@
         "varsIgnorePattern": "^_",
         "caughtErrorsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "max-classes-per-file": ["error", 5] 
   }
 }

@@ -5,18 +5,17 @@ import path from 'path';
 import { errors } from 'celebrate';
 import dotenv from 'dotenv';
 
+import errorHandler from './middlewares/error-handler';
 import routers from './routes';
 import { errorLogger, requestLogger } from './middlewares/logger';
-import errorHandler from 'middlewares/error-handler';
 
 const { PORT = 3000, DB_ADDRESS = 'mongodb://localhost:27017/weblarek' } = process.env;
 
 dotenv.config();
 const app = express();
+app.use(requestLogger);
 app.use(express.json());
 app.use(cors());
-app.use(requestLogger);
-
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));

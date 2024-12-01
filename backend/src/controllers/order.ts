@@ -1,13 +1,13 @@
-import { NextFunction, Request, Response } from "express";
-import { Joi, celebrate, Segments } from "celebrate";
-import { faker } from "@faker-js/faker";
-import { isValidPhoneNumber } from "libphonenumber-js";
+import { NextFunction, Request, Response } from 'express';
+import { Joi, celebrate, Segments } from 'celebrate';
+import { faker } from '@faker-js/faker';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
-import { BadRequestError, ServerError } from "../errors/errors";
-import Product from "../models/models";
+import { BadRequestError, ServerError } from '../errors/errors';
+import Product from '../models/models';
 
 interface IOrder {
-  payment: "card" | "online";
+  payment: 'card' | 'online';
   email: string;
   phone: string;
   address: string;
@@ -16,12 +16,12 @@ interface IOrder {
 }
 
 export const orderValidateSchema = Joi.object<IOrder>({
-  payment: Joi.equal("card", "online").required(),
+  payment: Joi.equal('card', 'online').required(),
   email: Joi.string().email().required(),
   phone: Joi.string()
     .custom((value, helpers) => {
-      if (!isValidPhoneNumber(value, "RU")) {
-        return helpers.error("string.phoneNumber", { value });
+      if (!isValidPhoneNumber(value, 'RU')) {
+        return helpers.error('string.phoneNumber', { value });
       }
       return value;
     })
@@ -38,7 +38,7 @@ export const orderRouteValidator = celebrate({
 export const createOrder = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { value, error } = orderValidateSchema.validate(req.body as IOrder);
@@ -54,15 +54,15 @@ export const createOrder = async (
           throw new BadRequestError('Product not found or price is null');
         }
         return product;
-      })
+      }),
     );
 
     // проверяем, что все товары найдены
     if (products.length !== value.items.length) {
       return next(
         new BadRequestError(
-          "Product data error: Not all products are available"
-        )
+          'Product data error: Not all products are available',
+        ),
       );
     }
 
@@ -71,8 +71,8 @@ export const createOrder = async (
     if (value.total !== productSum) {
       return next(
         new BadRequestError(
-          "The cost of the order does not correspond to the cost of the goods"
-        )
+          'The cost of the order does not correspond to the cost of the goods',
+        ),
       );
     }
 
