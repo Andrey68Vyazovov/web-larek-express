@@ -48,8 +48,14 @@ export const createOrder = async (
 
     // извлекаем из БД MongoDB список продуктов
     const products = await Promise.all(
-      value.items.map((item) => Product.findById(item))
-    ).then((products) => products.filter(Boolean));
+      value.items.map(async (item) => {
+        const product = await Product.findById(item);
+        if (!product || product.price === null) {
+          throw new BadRequestError('Product not found or price is null');
+        }
+        return product;
+      })
+    );
 
     // проверяем, что все товары найдены
     if (products.length !== value.items.length) {
@@ -61,12 +67,14 @@ export const createOrder = async (
     }
 
     // проверяем соответствие суммы заказа стоимости товаров
-    const productSum = products.reduce((sum, curr) => {
-      if (curr !== null && curr.price !== null) {
-        return sum + curr.price;
-      }
-      return sum;
-    }, 0);
+    const productSum = products.reduce((sum, curr) => sum + curr.price, 0);
+    if (value.total !== productSum) {
+      return next(
+        new BadRequestError(
+          "The cost of the order does not correspond to the cost of the goods"
+        )
+      );
+    }
 
     // отправляем ответ клиенту
     return res.status(200).send({

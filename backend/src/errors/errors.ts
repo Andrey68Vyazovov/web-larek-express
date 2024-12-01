@@ -18,8 +18,8 @@ export class ServerError extends HttpError {
 }
 
 export class NotFoundError extends HttpError {
-  constructor() {
-    super('Page not found', HttpCodes.NOT_FOUND);
+  constructor(message: string = 'Page not found') {
+    super(message, HttpCodes.NOT_FOUND);
   }
 }
 

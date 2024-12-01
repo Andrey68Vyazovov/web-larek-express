@@ -35,6 +35,5 @@ const productSchema = new mongoose.Schema<IProduct>({
   },
 });
 
-// TS-интерфейс модели product
 
 export default mongoose.model<IProduct>("product", productSchema);
